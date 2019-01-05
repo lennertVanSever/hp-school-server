@@ -3,6 +3,7 @@ import { gql } from 'apollo-server-express';
 
 const typeDefs = gql`
   type school {
+    id: Int
     name: String
     city: String
     street: String
@@ -18,9 +19,12 @@ const typeDefs = gql`
     school_group: [school_group]
     partner: [partner]
     sell_out: [sell_out]
+    longitude: Float
+    latitude: Float
   }
 
   type school_group {
+    id: Int
     name: String
     city: String
     street: String
@@ -29,9 +33,12 @@ const typeDefs = gql`
     address: String
     count_of_students: Int
     school: [school]
+    longitude: Float
+    latitude: Float
   }
 
   type partner {
+    id: Int
     name: String
     education_focused: Boolean
     school: [school]

@@ -1,5 +1,6 @@
 import schools from './schools.json';
 import { connection } from './data/connection';
+import axios from 'axios';
 
 function adressToStreetAndStreetNumber(adress) {
   if (adress) {
@@ -39,11 +40,16 @@ function resetDatabase() {
   const query = `
     DELETE FROM school_group_school;
 
-    DELETE FROM school;
-    ALTER TABLE school AUTO_INCREMENT = 1;
+    DELETE FROM school_partner;
 
     DELETE FROM school_group;
     ALTER TABLE school_group AUTO_INCREMENT = 1;
+
+    DELETE FROM partner;
+    ALTER TABLE partner AUTO_INCREMENT = 1;
+
+    DELETE FROM sell_out;
+    ALTER TABLE sell_out AUTO_INCREMENT = 1;
   `;
   connection.query(query, (error, result) => {
     if (error) return console.log(error);
@@ -74,13 +80,36 @@ function doSchoolGroups() {
       const query = `INSERT INTO school_group SET ?;`;
       connection.query(query, dataToInsert, (error, result) => {
         if (error) {
-          console.log(dataToInsert)
+          console.log(error)
           return reject(error);
         }
-        console.log(result);
+        console.log(dataToInsert);
         resolve(dataToInsert);
       })
     });
+  }
+
+  function getLocation(dataToInsert) {
+    const address = `BELGIE,${dataToInsert.city},${dataToInsert.postal_code},${dataToInsert.street}%20${dataToInsert.street_number}`;
+    if (address) {
+      axios.get(`http://www.mapquestapi.com/geocoding/v1/address?key=7Ar65wx0rpVfx7VmKO01pGTf4AhVZazQ&location=${address}`)
+      .then(function (response) {
+        if (response.data) {
+          if (response.data.results[0]) {
+            if (response.data.results[0].locations[0]){
+              dataToInsert.latitude = response.data.results[0].locations[0].latLng.lat;
+              dataToInsert.longitude = response.data.results[0].locations[0].latLng.lng;
+            }
+          }
+        }
+        insertScholenGroupData(dataToInsert);
+      })
+      .catch(function (error) {
+        insertScholenGroupData(dataToInsert);
+      });
+    } else {
+      insertScholenGroupData(dataToInsert);
+    }
   }
 
   const scholenGroups = getSchoolGroups();
@@ -95,7 +124,7 @@ function doSchoolGroups() {
       postal_code: scholenGroup['Postcode'] || null,
       count_of_students: scholenGroup['#Leerlingen'] || null,
     }
-    insertScholenGroupData(dataToInsert);
+    getLocation(dataToInsert);
   });
 }
 
@@ -118,8 +147,9 @@ function doSchool() {
     return uniqueSchools;
   }
 
-  function insertSchoolData(dataToInsert) {
+  function insertData(dataToInsert) {
     return new Promise((resolve, reject) => {
+      console.log(dataToInsert);
       const query = `INSERT INTO school SET ?;`;
       connection.query(query, dataToInsert, (error, result) => {
         if (error) {
@@ -130,6 +160,28 @@ function doSchool() {
         resolve(dataToInsert);
       })
     });
+  }
+  function getLocation(dataToInsert) {
+    const address = `BELGIE,${dataToInsert.city},${dataToInsert.postal_code},${dataToInsert.street}%20${dataToInsert.street_number}`;
+    if (address) {
+      axios.get(`http://www.mapquestapi.com/geocoding/v1/address?key=7Ar65wx0rpVfx7VmKO01pGTf4AhVZazQ&location=${address}`)
+      .then(function (response) {
+        if (response.data) {
+          if (response.data.results[0]) {
+            if (response.data.results[0].locations[0]){
+              dataToInsert.latitude = response.data.results[0].locations[0].latLng.lat;
+              dataToInsert.longitude = response.data.results[0].locations[0].latLng.lng;
+            }
+          }
+        }
+        insertData(dataToInsert);
+      })
+      .catch(function (error) {
+        insertData(dataToInsert);
+      });
+    } else {
+      insertData(dataToInsert);
+    }
   }
 
   const uniqueSchools = getSchool();
@@ -148,7 +200,7 @@ function doSchool() {
       bring_your_own_device: toBoolean(school['BYOD']),
       website: school['Website'] || null,
     }
-    insertSchoolData(dataToInsert);
+    getLocation(dataToInsert);
   });
 
 }
@@ -372,10 +424,10 @@ function doSellOuts() {
 }
 
 
-// resetDatabase();
+//resetDatabase();
+//doSchool();
 
 //doSchoolGroups();
-//doSchool();
 //doConnectionSchoolToSchoolGroup();
 
 //doPartners();

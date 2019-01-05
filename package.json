@@ -18,9 +18,11 @@
     "nodemon": "^1.18.9"
   },
   "dependencies": {
+    "@google/maps": "^0.5.5",
     "@okgrow/graphql-scalars": "^0.4.2",
     "apollo-boost": "^0.1.23",
     "apollo-server": "^2.0.5",
+    "axios": "^0.18.0",
     "dataloader": "^1.4.0",
     "express-graphql": "^0.6.12",
     "graphql": "^0.13.2",
