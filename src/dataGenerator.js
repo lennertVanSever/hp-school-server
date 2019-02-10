@@ -1,4 +1,4 @@
-import schools from './schools.json';
+import schools from '../schools.json';
 import { connection } from './data/connection';
 import axios from 'axios';
 

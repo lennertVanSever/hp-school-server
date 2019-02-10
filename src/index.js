@@ -3,7 +3,7 @@ import { resolvers } from './data/resolvers';
 import { typeDefs } from './data/Schema';
 import ApolloClient from 'apollo-boost';
 import fetch from 'node-fetch';
-import './dataGenerator';
+// import './dataGenerator';
 
 global.fetch = fetch;
 

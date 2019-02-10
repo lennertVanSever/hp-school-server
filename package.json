@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon index.js --exec babel-node --presets es2015,stage-2",
+    "start": "node dist/main.js",
+    "dev": "nodemon src/index.js --exec babel-node --presets es2015,stage-2",
     "webpack": "webpack",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -13,11 +14,14 @@
   "license": "ISC",
   "devDependencies": {
     "babel-cli": "^6.26.0",
+    "babel-loader": "^7.1.5",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
     "nodemon": "^1.18.9",
-    "webpack-cli": "^3.2.3"
+    "webpack": "^4.29.3",
+    "webpack-cli": "^3.2.3",
+    "webpack-node-externals": "^1.7.2"
   },
   "dependencies": {
     "@google/maps": "^0.5.5",
@@ -32,7 +36,6 @@
     "graphql-tag": "^2.10.0",
     "graphql-tools": "^3.1.1",
     "lodash": "^4.17.11",
-    "mysql": "^2.16.0",
-    "webpack": "^4.29.3"
+    "mysql": "^2.16.0"
   }
 }
