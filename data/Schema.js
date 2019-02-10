@@ -17,7 +17,7 @@ const typeDefs = gql`
     bring_your_own_device: Boolean
     website: String
     school_group: [school_group]
-    partner: [partner]
+    partners: [partner]
     sell_out: [sell_out]
     longitude: Float
     latitude: Float
@@ -41,7 +41,7 @@ const typeDefs = gql`
     id: Int
     name: String
     education_focused: Boolean
-    school: [school]
+    schools: [school]
   }
 
   type sell_out {
@@ -49,6 +49,16 @@ const typeDefs = gql`
     fiscal_year: Int
     hp_quarter: Int
     partner: partner
+  }
+
+  type address_prediction {
+    display_string: String,
+    longitude: Float
+    latitude: Float
+    city: String
+    street: String
+    street_number: String
+    postal_code: Int
   }
 
   input range {
@@ -61,6 +71,25 @@ const typeDefs = gql`
     schools(range: range!, search: String): [school]
     partners(range: range!, search: String): [partner]
     school(id: Int): school
+    partner(id: Int): partner
+  }
+
+  input keyValue {
+    key: String
+    value: String
+    type: String
+  }
+
+  type entity {
+    name: String
+    id: Int
+  }
+
+  type Mutation {
+    update_entity(keyValue: keyValue, id: Int, entity: String): entity
+    create_entity(entity: String): entity
+    link_entity(base_entity_id: Int, base_entity_name: String, link_entity_id: Int, link_entity_name: String, remove: Boolean): entity
+    recalculate_location(city: String, street: String, street_number: String, postal_code: Int, id: Int): school
   }
 `;
 

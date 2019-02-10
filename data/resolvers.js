@@ -7,6 +7,9 @@ import {
   sellOutBySchool,
   partnerByPartnerIdLoader,
 } from './loaders';
+import Mutation from './mutations';
+import axios from 'axios';
+
 
 function getAddress() {
   return `CONCAT(city, ' ', postal_code, ' ', street, ' ', street_number) AS address`;
@@ -37,7 +40,7 @@ const resolvers = {
     school_group({ id }){
       return schoolGroupBySchoolLoader.load(id);
     },
-    partner({ id }){
+    partners({ id }){
       return partnerBySchoolLoader.load(id);
     },
     sell_out({ id }){
@@ -45,7 +48,7 @@ const resolvers = {
     }
   },
   partner: {
-    school({ id }){
+    schools({ id }){
       return schoolByPartnerLoader.load(id);
     }
   },
@@ -84,15 +87,28 @@ const resolvers = {
     },
     partners: (root, { range, search }) => {
       return new Promise((resolve, reject) => {
-        connection.query(`SELECT * from partner ${getSearch(search, true)} ${getRange(range)}`, (error, results) => {
+        connection.query(`SELECT * from partner ${getSearch(search, true)} order by name ${getRange(range)}`, (error, results) => {
           if (error) reject(error);
           resolve(results);
         });
       });
     },
+    partner: (root, { id }) => {
+      return new Promise((resolve, reject) => {
+        const query = `SELECT * from partner where id = ?`;
+        connection.query(query, [id], (error, results) => {
+          if (error) reject(error);
+          resolve(results[0]);
+        });
+      });
+    },
   },
+  Mutation: Mutation.Mutation,
 }
 
 module.exports = {
   resolvers
 }
+
+//http://www.mapquestapi.com/search/v3/prediction?key=7Ar65wx0rpVfx7VmKO01pGTf4AhVZazQ&limit=5&collection=adminArea,poi,address,category,franchise,airport&q=den
+
