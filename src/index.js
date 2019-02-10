@@ -24,6 +24,6 @@ const port = process.env.PORT || 5000;
 server.listen({ port }).then(({ url }) => {
   console.log(`🚀  ${url}`);
   global.client = new ApolloClient({
-    uri: 'http://localhost:4000/graphql',
+    uri: `http://localhost:${port}/graphql`,
   });
 });

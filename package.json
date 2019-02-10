@@ -30,6 +30,7 @@
     "apollo-server": "^2.0.5",
     "axios": "^0.18.0",
     "dataloader": "^1.4.0",
+    "dotenv": "^6.2.0",
     "express-graphql": "^0.6.12",
     "graphql": "^0.13.2",
     "graphql-server-express": "^1.4.0",
