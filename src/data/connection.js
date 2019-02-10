@@ -5,7 +5,7 @@ dotenv.config();
 var connection = mysql.createConnection({
   host: 'hp-education.c7tfzswraxss.eu-central-1.rds.amazonaws.com',
   user: 'sara',
-  password: process.env.DB_PASSOWRD,
+  password: process.env.DB_PASSWORD,
   database: 'hp-education',
   multipleStatements: true
 });
